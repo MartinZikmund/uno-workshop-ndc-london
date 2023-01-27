@@ -27,7 +27,7 @@ public class AppThemeService
 
     public bool IsDark => SystemThemeHelper.IsRootInDarkMode(_window.Content.XamlRoot!);
 
-    public async ValueTask SetThemeAsync(bool darkMode, CancellationToken ct = default)
+    public async ValueTask SetThemeAsync(bool darkMode, CancellationToken ct)
     {
         var tcs = new TaskCompletionSource<object>();
         await using var _ = ct.Register(() => tcs.TrySetCanceled());

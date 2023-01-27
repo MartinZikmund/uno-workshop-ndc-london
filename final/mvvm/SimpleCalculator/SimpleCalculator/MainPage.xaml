@@ -1,0 +1,94 @@
+﻿<Page x:Class="SimpleCalculator.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:um="using:Uno.Material"
+      xmlns:calc="using:SimpleCalculator.Business"
+      Background="{ThemeResource BackgroundBrush}">
+    <utu:AutoLayout utu:SafeArea.Insets="VisibleBounds"
+                  MaxWidth="700"
+                  Padding="0,0,0,16"
+                  Background="{ThemeResource BackgroundBrush}"
+                  PrimaryAxisAlignment="End">
+        <ToggleButton Background="{ThemeResource SecondaryContainerBrush}"
+                  Margin="8"
+                  utu:AutoLayout.CounterAlignment="Center"
+                  Style="{StaticResource IconToggleButtonStyle}"
+                  IsChecked="{Binding IsDark, Mode=TwoWay}"
+                  CornerRadius="20">
+            <ToggleButton.Content>
+                <PathIcon Data="{StaticResource SunIcon}"
+                  Foreground="{ThemeResource PrimaryVariantDarkBrush}" />
+            </ToggleButton.Content>
+            <um:ControlExtensions.AlternateContent>
+                <PathIcon Data="{StaticResource MoonIcon}"
+                  Foreground="{ThemeResource PrimaryVariantDarkBrush}" />
+            </um:ControlExtensions.AlternateContent>
+        </ToggleButton>
+        <utu:AutoLayout Spacing="16"
+                    Padding="16,8"
+                    PrimaryAxisAlignment="End"
+                    utu:AutoLayout.PrimaryAlignment="Stretch">
+            <TextBlock Text="{Binding Calculator.Equation}"
+           utu:AutoLayout.CounterAlignment="End"
+           Foreground="{ThemeResource OnSecondaryContainerBrush}"
+           Style="{StaticResource DisplaySmall}" />
+            <TextBlock Text="{Binding Calculator.Output}"
+           utu:AutoLayout.CounterAlignment="End"
+           Foreground="{ThemeResource OnBackgroundBrush}"
+           Style="{StaticResource DisplayLarge}" />
+        </utu:AutoLayout>
+        <utu:AutoLayout MaxHeight="500" Spacing="16" Padding="16,0">
+            <!--Keypad-->
+            <Grid RowSpacing="16" ColumnSpacing="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--Row 0-->
+                <Button Grid.Row="0" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="C" Background="{ThemeResource PrimaryContainerBrush}" Content="C" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="±" Background="{ThemeResource PrimaryContainerBrush}" Content="±" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="%" Background="{ThemeResource PrimaryContainerBrush}" Content="%" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="÷" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="÷" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+                <!--Row 1-->
+                <Button Grid.Row="1" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="7" Background="{ThemeResource SecondaryContainerBrush}" Content="7" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="1" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="8" Background="{ThemeResource SecondaryContainerBrush}" Content="8" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="9" Background="{ThemeResource SecondaryContainerBrush}" Content="9" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="×" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="×" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+                <!--Row 2-->
+                <Button Grid.Row="2" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="4" Background="{ThemeResource SecondaryContainerBrush}" Content="4" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="2" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="5" Background="{ThemeResource SecondaryContainerBrush}" Content="5" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="2" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="6" Background="{ThemeResource SecondaryContainerBrush}" Content="6" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="2" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="−" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="−" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+                <!--Row 3-->
+                <Button Grid.Row="3" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="1" Background="{ThemeResource SecondaryContainerBrush}" Content="1" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="3" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="2" Background="{ThemeResource SecondaryContainerBrush}" Content="2" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="3" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="3" Background="{ThemeResource SecondaryContainerBrush}" Content="3" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="3" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="+" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="+" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+                <!--Row 4-->
+                <Button Grid.Row="4" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="{x:Bind calc:Calculator.NumberDecimalSeparator}" Background="{ThemeResource SecondaryContainerBrush}" Content="{x:Bind calc:Calculator.NumberDecimalSeparator}" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="4" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="0" Background="{ThemeResource SecondaryContainerBrush}" Content="0" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+                <Button Grid.Row="4" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="back" Background="{ThemeResource SecondaryContainerBrush}" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}">
+                    <Button.Content>
+                        <FontIcon Glyph="&#xE926;" />
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="4" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="=" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="=" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+            </Grid>
+        </utu:AutoLayout>
+    </utu:AutoLayout>
+</Page>

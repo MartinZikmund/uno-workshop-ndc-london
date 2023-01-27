@@ -27,9 +27,11 @@ The Simple Calc Workshop is here to help you get started building an app for Des
 - [01 - Getting Started](#1-getting-Started)
 - [02 - Creating the Project](#2-creating-the-project)
 - [03 - Basic Layout](#3-basic-layout)
-- [04 - Architecture](#4-architecture)
-  - [MVVM](modules/04-App%20Architecture%20-%20MVVM/README.md)
-  - [MVU-X](modules/04-App%20Architecture%20-%20MVU-X/README.md)
+- [04 - Architecture](#4-app-architecture)
+  - [MVVM](#4a-model-view-viewmodel-mvvm)
+  - [MVU-X](#4b-model-view-update-for-xaml-mvu-x)
+- [#5 - Theming](#5-theming)
+- [6# - Creating the Calculator](#6-creating-the-calculator)
 
 # 1. Getting Started
 
@@ -244,7 +246,7 @@ In order to make use of the SafeArea we need to update the root AutoLayout by us
 </Page>
 ```
 
-# 3. App Architecture
+# 4. App Architecture
 
 In this section we will add a application design architecture - either MVVM or MVU-X. Follow the section that matches your selection from `dotnet new`.
 
@@ -261,7 +263,7 @@ For both MVVM and MVU-X we will need to add the `AppThemeService.cs` file from `
 AppThemeService.Init(Window);
 ```
 
-# 3a. Model View ViewModel (MVVM)
+## 4a. Model View ViewModel (MVVM)
 
 Model-View-ViewModel is a well established pattern for building applications. It is a pattern that is well suited to the Uno Platform, and is a great way to build your apps. In this module we will be looking at how to use the MVVM pattern to build our UI. We will be using the CommunityToolkit.MVVM to help us build our UI. It is important to note that while we will be using the CommunityToolkit that there are a number of other MVVM Frameworks that you can use with Uno Platform.
 
@@ -274,7 +276,7 @@ Because we used the Uno Platform Extensions template to create the project, we a
   <img alt="Install CommunityToolkit.Mvvm" src="art/Light/CommunityToolkitMvvm.png">
 </picture>
 
-## Getting Started
+### Getting Started
 
 To start off we will need to create a new model called `MainViewModel` and add a couple of properties to it. We'll add two properties that we will then bind to in our View. For our IsDark property we will need some special logic when IsDark is changed, for this property we will need to fully implement it. However for our Output property we can simply provide the private backing field and let the source generator generate the boilerplate for the public facing property by marking the private field with the `[ObservableProperty]` attribute.
 
@@ -293,7 +295,7 @@ public partial class MainViewModel : ObservableObject
         {
             if (SetProperty(ref _isDark, value))
             {
-                AppThemeService.Instance.SetThemeAsync(_isDark, default);
+                _ = AppThemeService.Instance.SetThemeAsync(_isDark, default);
             }
         }
     }
@@ -303,7 +305,7 @@ public partial class MainViewModel : ObservableObject
 }
 ```
 
-## Binding to properties in the UI
+### Binding to properties in the UI
 
 With our ViewModel created we will now need to set up our DataContext and create some bindings.
 
@@ -372,7 +374,7 @@ Now let's update our UI in the MainPage.xaml to use the bindings.
 
 With our bindings in place we can now run the app and see the theme switch work.
 
-## Commands
+### Commands
 
 In addition to properties, sometimes we may need to create and execute commands. For this we will add a couple of properties to our `MainViewModel` and then update the `Button` in our UI to use the `Command` property.
 
@@ -405,7 +407,7 @@ Now we just need to update the `Button` on `MainPage` as shown here.
 
 With our UI updated we can run the app again and Press the Button. We should see the text of the Button change to reflect the number of times it has been pressed.
 
-# 3b. Model View Update for Xaml (MVU-X)
+## 4b. Model View Update for Xaml (MVU-X)
 
 Model View Update has become an increasingly popular choice for developers looking to have a more functional approach to building user interfaces. It is a pattern that is well suited to the Uno Platform, and is a great way to build your apps. In this module we will be looking at how to use the MVU-X pattern to build our UI. MVU-X is a pattern that is based on the MVU pattern, but is designed to work with XAML using `Uno.Extensions.Reactive`. In order to begin building our first Model we will need to install Uno.Extensions.Reactive. If you started from the template above, you should already have the extension installed. Otherwise use NuGet Package Manager:
 
@@ -415,7 +417,7 @@ Model View Update has become an increasingly popular choice for developers looki
   <img alt="Install Uno.Toolkit.WinUI" src="art/Light/UnoExtensionsReactive.png">
 </picture>
 
-## Getting Started
+### Getting Started
 
 To start off we will need to create a new model called `MainModel` and add a couple of properties to it. We'll add two IState properties that we will then bind to in our View.
 
@@ -446,7 +448,7 @@ public MainModel()
 }
 ```
 
-## Binding to properties in the UI
+### Binding to properties in the UI
 
 With our model created we will now need to set up our DataContext and create some bindings.
 
@@ -517,7 +519,7 @@ Now let's update our UI in the MainPage.xaml to use the bindings.
 
 With our bindings in place we can now run the app and see the theme switch work.
 
-## Feeds &amp; Commands
+### Feeds &amp; Commands
 
 In addition to the `IState`, sometimes we may need to create composite properties and execute commands. Reactive makes this simple with the `IFeed` and automatically detecting public methods. We will make a couple of changes to our MainModel to demonstrate this.
 
@@ -552,7 +554,7 @@ Now we just need to update the `Button` in our UI as shown here.
 With our UI updated we can run the app again and press the Button. We should see the text of the Button change to reflect the number of times it has been pressed.
 
 
-# 4. Themes
+# 5. Theming
 
 As we begin to look at themes we will look at common design systems such as the default Fluent design system provided out of the box with Uno Platform and WinUI, followed by the more commonly used Material design system with Uno Platform.
 
@@ -597,7 +599,7 @@ Next, open up the App.xaml in any of the Platform head projects and apply the ov
 
 Now run the app and you'll notice how the colors have been updated. Feel free to update the colors in the `ColorPaletteOverride.xaml` to match your style and liking!
 
-# 5. Creating the Calculator
+# 6. Creating the Calculator
 
 Now that we have a basic understanding of the Uno Platform and how to build a simple app we can start building our Calculator. To start we will need to update the DataContext to use the Calculator engine included in the Workshop NuGet we installed earlier.
 
@@ -609,21 +611,26 @@ Now that we have a basic understanding of the Uno Platform and how to build a si
 ```cs
 public partial class MainViewModel : ObservableObject
 {
-    private bool _isDark = AppThemeService.Instance.IsDark;
+    private bool _isDark;
+    
     public bool IsDark
     {
         get => _isDark;
-        set => SetProperty(ref _isDark, value, async dark => await AppThemeService.Instance.SetThemeAsync(dark, default));
+        set
+        {
+            if (SetProperty(ref _isDark, value))
+            {
+                _ = AppThemeService.Instance.SetThemeAsync(value);
+            }
+        }
     }
 
     [ObservableProperty]
-    private Calculator _calculator = new Calculator();
+    private Calculator _calculator = new();
 
     [RelayCommand]
-    private void Input(KeyInput key) => Calculator.Input(key);
-
-    [RelayCommand]
-    private void InputVirtualKey(VirtualKey key) => Calculator.Input(key);
+    private void Input(string key)
+        => Calculator = Calculator.Input(key);
 }
 ```
 </details>
@@ -655,8 +662,6 @@ public partial record MainModel
 
 ## Creating the Calculator UI
 
-> **NOTE:** When Binding the Commands note that the MVU-X commands will be `Input` and `InputVirtualKey` while the MVVM commands will be generated as `InputCommand` and `InputVirtualKeyCommand`. The code samples below will use the MVU style `Input` & `InputVirtualKey`. If you are using MVVM be sure to update the command names for the Bindings.
-
 To Start let's update the section of our UI where we have 2 existing TextBlocks one currently with the Text `Equation` and the other bound to `Ouput` from the last module. Here we will create a Binding for the Calculator properties for the Equation and the Output.
 
 ```xml
@@ -682,173 +687,69 @@ Before we can add the buttons for our Calculator we need to add an XML Namespace
       Background="{ThemeResource BackgroundBrush}">
 ```
 
-Now we can add the buttons for our Calculator. For this we will need to replace the TextBox and Button with the following content:
+Now we can add the buttons for our Calculator. For this we will need to replace last `AutoLayout` and its content as follows:
 
 ```xml
-<utu:AutoLayout Spacing="16" Orientation="Horizontal" Height="72">
-  <Button Content="C"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Clear}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSecondaryContainerBrush}" />
-  <Button Content="±"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.PlusMinus}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSecondaryContainerBrush}" />
-  <Button Content="%"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Percentage}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSecondaryContainerBrush}" />
-  <Button Content="÷"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Division}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryVariantDarkBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnTertiaryBrush}" />
-</utu:AutoLayout>
-<utu:AutoLayout Spacing="16" Orientation="Horizontal" Height="72">
-  <Button Content="7"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Seven}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="8"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Eight}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="9"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Nine}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="×"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Multiplication}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryVariantDarkBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnTertiaryBrush}" />
-</utu:AutoLayout>
-<utu:AutoLayout Spacing="16" Orientation="Horizontal" Height="72">
-  <Button Content="4"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Four}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="5"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Five}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="6"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Six}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="−"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Subtraction}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryVariantDarkBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnTertiaryBrush}" />
-</utu:AutoLayout>
-<utu:AutoLayout Spacing="16" Orientation="Horizontal" Height="72">
-  <Button Content="1"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.One}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="2"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Two}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="3"
-          Command="{Binding Input}"
-          FontSize="32"
-          CommandParameter="{x:Bind calc:KeyInput.Three}"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="+"
-          Command="{Binding Input}"
-          FontSize="32"
-          CommandParameter="{x:Bind calc:KeyInput.Addition}"
-          Background="{ThemeResource PrimaryVariantDarkBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnTertiaryBrush}" />
-</utu:AutoLayout>
-<utu:AutoLayout Spacing="16" Orientation="Horizontal" Height="72">
-  <Button Content="."
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Dot}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="0"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Zero}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="&lt;-"
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Back}"
-          FontSize="32"
-          Background="{ThemeResource SecondaryContainerBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnSurfaceBrush}" />
-  <Button Content="="
-          Command="{Binding Input}"
-          CommandParameter="{x:Bind calc:KeyInput.Equal}"
-          FontSize="32"
-          Background="{ThemeResource PrimaryVariantDarkBrush}"
-          utu:AutoLayout.PrimaryAlignment="Stretch"
-          Foreground="{ThemeResource OnTertiaryBrush}" />
+<utu:AutoLayout MaxHeight="500" Spacing="16" Padding="16,0">
+    <!--Keypad-->
+    <Grid RowSpacing="16" ColumnSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Row 0-->
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="C" Background="{ThemeResource PrimaryContainerBrush}" Content="C" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="±" Background="{ThemeResource PrimaryContainerBrush}" Content="±" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="0" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="%" Background="{ThemeResource PrimaryContainerBrush}" Content="%" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="0" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="÷" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="÷" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+        <!--Row 1-->
+        <Button Grid.Row="1" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="7" Background="{ThemeResource SecondaryContainerBrush}" Content="7" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="8" Background="{ThemeResource SecondaryContainerBrush}" Content="8" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="1" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="9" Background="{ThemeResource SecondaryContainerBrush}" Content="9" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="1" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="×" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="×" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+        <!--Row 2-->
+        <Button Grid.Row="2" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="4" Background="{ThemeResource SecondaryContainerBrush}" Content="4" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="5" Background="{ThemeResource SecondaryContainerBrush}" Content="5" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="6" Background="{ThemeResource SecondaryContainerBrush}" Content="6" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="2" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="−" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="−" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+        <!--Row 3-->
+        <Button Grid.Row="3" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="1" Background="{ThemeResource SecondaryContainerBrush}" Content="1" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="3" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="2" Background="{ThemeResource SecondaryContainerBrush}" Content="2" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="3" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="3" Background="{ThemeResource SecondaryContainerBrush}" Content="3" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="3" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="+" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="+" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+
+        <!--Row 4-->
+        <Button Grid.Row="4" Grid.Column="0" Command="{Binding InputCommand}" FontSize="32" CommandParameter="{x:Bind calc:Calculator.NumberDecimalSeparator}" Background="{ThemeResource SecondaryContainerBrush}" Content="{x:Bind calc:Calculator.NumberDecimalSeparator}" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="4" Grid.Column="1" Command="{Binding InputCommand}" FontSize="32" CommandParameter="0" Background="{ThemeResource SecondaryContainerBrush}" Content="0" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}" />
+        <Button Grid.Row="4" Grid.Column="2" Command="{Binding InputCommand}" FontSize="32" CommandParameter="back" Background="{ThemeResource SecondaryContainerBrush}" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnSurfaceBrush}">
+            <Button.Content>
+                <FontIcon Glyph="&#xE926;" />
+            </Button.Content>
+        </Button>
+        <Button Grid.Row="4" Grid.Column="3" Command="{Binding InputCommand}" FontSize="32" CommandParameter="=" Background="{ThemeResource PrimaryVariantDarkBrush}" Content="=" HorizontalAlignment="Stretch" Height="72" VerticalAlignment="Stretch" Foreground="{ThemeResource OnTertiaryBrush}" />
+    </Grid>
 </utu:AutoLayout>
 ```
 
-Now we can run the Calculator with a fully functional UI running the Calculator engine. If you run on a desktop target such as Windows you will notice however that if you press common buttons like one of the numbers on your keyboard that nothing happens. For this we will need to add the KeyboardBehavior.
+Now we can run the Calculator with a fully functional UI running the Calculator engine.
 
-```xml
-<Page x:Class="SimpleCalculator.MainPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:utu="using:Uno.Toolkit.UI"
-      xmlns:um="using:Uno.Material"
-      xmlns:calc="using:SimpleCalculator.Business"
-      xmlns:keyboard="using:SimpleCalculator.Keyboard"
-      Background="{ThemeResource BackgroundBrush}"
-      keyboard:KeyboardBehavior.KeyUpCommand="{Binding InputVirtualKey}">
-```
+## Closing
 
-Now we can run this on a desktop target and press common keys such as 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, +, -, *, /, =, ., and Backspace to interact with the Calculator.
+As all the code is now, in you are free to explore further and make your own adjsutments and improvements. Maybe you want to make the calculator support Hexadecimal input? Or you want to adjust the visuals and change the layout to linear? All the power of Uno Platform is under your figertips!
+
+Check out our complete documentation and feel free to chat with us on Discord. We would love to see your own calculator creations, so make sure to send us screenshots!
+
+We can't wait to see what you build with Uno Platform!
