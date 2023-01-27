@@ -1,5 +1,7 @@
 # Simple Calc Workshop
 
+## Short link - https://cutt.ly/ndcworkshop
+
 The Simple Calc Workshop is here to help you get started building an app for Desktop, Mobile and Web with Uno Platform. This workshop is designed to help you get your developer environment set up to start building your first Uno App while learning about the tools, libraries and patterns that will help you to build your apps with Uno Platform.
 
 ## What you will learn
