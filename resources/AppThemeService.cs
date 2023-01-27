@@ -8,19 +8,13 @@ using Microsoft.UI.Xaml;
 
 namespace SimpleCalculator;
 
-public interface IAppThemeService
+public class AppThemeService
 {
-    bool IsDark { get; }
-    ValueTask SetThemeAsync(bool darkMode, CancellationToken ct);
-}
+    private static AppThemeService? _instance;
 
-public class AppThemeService : IAppThemeService
-{
-    private static IAppThemeService? _instance;
+    public static AppThemeService Instance => _instance ?? throw new Exception("You must call 'AppThemeService.Init(window)' prior to getting the current instance.");
 
-    public static IAppThemeService Instance => _instance ?? throw new Exception("You must call 'AppThemeService.Init(window)' prior to getting the current instance.");
-
-    public static IAppThemeService Init(Window window) =>
+    public static AppThemeService Init(Window window) =>
         new AppThemeService(window);
 
     private readonly Window _window;
